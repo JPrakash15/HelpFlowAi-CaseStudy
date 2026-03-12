@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HelpFlow AI — Design Case Study by Jayaprakash J</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2563EB;
+    --blue-light: #CBE0FF;
+    --blue-dark: #152E63;
+    --purple: #8E2DE2;
+    --dark: #0F172A;
+    --mid: #334155;
+    --soft: #64748B;
+    --muted: #94A3B8;
+    --bg: #F8FAFF;
+    --white: #FFFFFF;
+    --border: #E2E8F0;
+    --accent: #F6F9FF;
+    --nav-width: 220px;
+    --content-max: 780px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── LAYOUT ─────────────────────────────── */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  .main-content {
+    flex: 1;
+    max-width: calc(100% - var(--nav-width));
+    padding: 0 0 120px 0;
+  }
+
+  /* ── RIGHT NAV ───────────────────────────── */
+  .side-nav {
+    width: var(--nav-width);
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    padding: 48px 24px;
+    border-left: 1px solid var(--border);
+    background: var(--white);
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .side-nav .nav-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .side-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .side-nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--soft);
+    transition: all 0.2s ease;
+    line-height: 1.3;
+  }
+
+  .side-nav ul li a .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .side-nav ul li a:hover {
+    background: var(--accent);
+    color: var(--blue);
+  }
+
+  .side-nav ul li a:hover .dot,
+  .side-nav ul li a.active .dot {
+    background: var(--blue);
+  }
+
+  .side-nav ul li a.active {
+    background: var(--accent);
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  .nav-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  .nav-author {
+    margin-top: auto;
+    padding-top: 20px;
+  }
+
+  .nav-author .author-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .nav-author .author-role {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .nav-author .author-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .nav-author .author-links a {
+    font-size: 11px;
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── HERO ────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 80px 80px 80px;
+    position: relative;
+    overflow: hidden;
+    background: var(--dark);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(37,99,235,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    right: 200px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(142,45,226,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(37,99,235,0.15);
+    border: 1px solid rgba(37,99,235,0.3);
+    border-radius: 100px;
+    padding: 6px 14px;
+    margin-bottom: 40px;
+    width: fit-content;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-tag .tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #60A5FA;
+    animation: pulse 2s infinite;
+  }
+
+  .hero-tag span {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #93C5FD;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--white);
+    max-width: 700px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, #60A5FA, #A78BFA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    margin-top: 32px;
+    font-size: 18px;
+    color: #94A3B8;
+    max-width: 520px;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 48px;
+    margin-top: 64px;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .hero-meta-item .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #475569;
+    margin-bottom: 6px;
+  }
+
+  .hero-meta-item .value {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 80px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #475569;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: #475569;
+  }
+
+  /* ── SECTIONS ────────────────────────────── */
+  section {
+    padding: 100px 80px;
+    border-bottom: 1px solid var(--border);
+    max-width: var(--content-max);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--dark);
+    margin-bottom: 32px;
+  }
+
+  h2 em {
+    font-style: italic;
+    color: var(--blue);
+  }
+
+  h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 16px;
+    margin-top: 48px;
+  }
+
+  p {
+    font-size: 16px;
+    color: var(--mid);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  p strong {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  /* ── CALLOUT BOX ─────────────────────────── */
+  .callout {
+    background: var(--accent);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 12px 12px 0;
+    padding: 24px 28px;
+    margin: 32px 0;
+  }
+
+  .callout p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--mid);
+  }
+
+  .callout strong {
+    color: var(--blue);
+  }
+
+  /* ── QUOTE ───────────────────────────────── */
+  .pull-quote {
+    margin: 48px 0;
+    padding: 0 0 0 32px;
+    border-left: 2px solid var(--blue);
+  }
+
+  .pull-quote p {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--dark);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ── DECISION CARDS ──────────────────────── */
+  .decision-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .decision-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s ease;
+  }
+
+  .decision-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(37,99,235,0.08);
+  }
+
+  .decision-card .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .decision-card .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .decision-card .card-body {
+    font-size: 13.5px;
+    color: var(--soft);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── COLOR SWATCHES ──────────────────────── */
+  .color-row {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .swatch-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .swatch-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--soft);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* ── TYPE SPECIMEN ───────────────────────── */
+  .type-specimen {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 24px 0;
+  }
+
+  .type-specimen .specimen-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .type-specimen .specimen-text {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .type-specimen .specimen-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ── PROCESS STEPS ───────────────────────── */
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 32px 0;
+    position: relative;
+  }
+
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 40px;
+    bottom: 40px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .process-step {
+    display: flex;
+    gap: 24px;
+    padding: 24px 0;
+    position: relative;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--blue);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .step-content .step-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  .step-content .step-body {
+    font-size: 14px;
+    color: var(--soft);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── STAT ROW ────────────────────────────── */
+  .stat-row {
+    display: flex;
+    gap: 32px;
+    margin: 40px 0;
+    padding: 32px;
+    background: var(--dark);
+    border-radius: 20px;
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Fraunces', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-number span {
+    background: linear-gradient(135deg, #60A5FA, #A78BFA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.4;
+  }
+
+  /* ── WHAT I'D FIX ────────────────────────── */
+  .improvement-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .improvement-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .improvement-item .imp-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .improvement-item .imp-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .improvement-item .imp-body {
+    font-size: 13.5px;
+    color: var(--soft);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── CLOSING ─────────────────────────────── */
+  .closing-section {
+    background: var(--dark);
+    border-radius: 24px;
+    padding: 64px;
+    margin: 100px 80px;
+    max-width: calc(var(--content-max));
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .closing-section::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(142,45,226,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .closing-section h2 {
+    color: var(--white);
+    font-size: clamp(28px, 3vw, 42px);
+    margin-bottom: 20px;
+  }
+
+  .closing-section p {
+    color: #94A3B8;
+    font-size: 16px;
+    max-width: 520px;
+  }
+
+  .closing-links {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue);
+    color: var(--white);
+    padding: 14px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background: #1D4ED8;
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--white);
+    padding: 14px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* ── ANIMATIONS ──────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ──────────────────────────── */
+  @media (max-width: 900px) {
+    .side-nav { display: none; }
+    .main-content { max-width: 100%; }
+    section { padding: 60px 32px; }
+    .hero { padding: 60px 32px; }
+    .decision-grid { grid-template-columns: 1fr; }
+    .stat-row { flex-direction: column; gap: 24px; }
+    .closing-section { margin: 60px 32px; padding: 40px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HERO -->
+    <div class="hero" id="overview">
+      <div class="hero-tag">
+        <div class="tag-dot"></div>
+        <span>Design Case Study</span>
+      </div>
+
+      <h1>Making support feel like a <em>conversation</em></h1>
+
+      <p class="hero-sub">
+        A complete landing page, visual identity, and design system for HelpFlow AI — an AI-powered customer support platform. Delivered in 3 days.
+      </p>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="label">Designer</div>
+          <div class="value">Jayaprakash J</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Role</div>
+          <div class="value">UI / Visual Designer</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Timeline</div>
+          <div class="value">3-Day Sprint</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Year</div>
+          <div class="value">2025</div>
+        </div>
+      </div>
+
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        <span>Scroll to explore</span>
+      </div>
+    </div>
+
+    <!-- BRIEF -->
+    <section id="brief" class="reveal">
+      <span class="section-tag">01 — The Brief</span>
+      <h2>A product that needed to <em>earn trust</em> before asking for a signup</h2>
+
+      <p>The task was clear on the surface — design a landing page for HelpFlow AI, an AI-powered help desk targeting startup founders and customer support teams. The goal: waitlist signups.</p>
+
+      <p>But the real brief underneath? <strong>Make a stranger trust an AI product enough to hand over their email address.</strong> That's a harder problem. And it starts before a single pixel is placed.</p>
+
+      <div class="callout">
+        <p><strong>Design constraint:</strong> "Warm + professional" visual direction. 3-day deadline. Deliverables: high-fidelity desktop, mobile responsive, design system, OG image, logo variants, and component library.</p>
+      </div>
+
+      <h3>Who I designed for</h3>
+      <p>Three distinct users shaped every decision on this page:</p>
+
+      <div class="decision-grid">
+        <div class="decision-card">
+          <span class="card-icon">🚀</span>
+          <div class="card-title">Startup Founders</div>
+          <p class="card-body">Results-oriented, time-poor. Need to feel the value before they read the headline. They scroll fast and decide faster.</p>
+        </div>
+        <div class="decision-card">
+          <span class="card-icon">🎧</span>
+          <div class="card-title">Support Team Managers</div>
+          <p class="card-body">Practical, process-driven. They evaluate tools by how well features map to their existing workflow — not by aesthetics.</p>
+        </div>
+        <div class="decision-card">
+          <span class="card-icon">🔍</span>
+          <div class="card-title">Career Switchers</div>
+          <p class="card-body">Exploring AI tools. Need reassurance and clarity over excitement. Trust before transaction.</p>
+        </div>
+        <div class="decision-card">
+          <span class="card-icon">💡</span>
+          <div class="card-title">The Universal Need</div>
+          <p class="card-body">Every user needed to feel three things in order — this is credible, this solves my problem, this is worth my email.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISUAL DIRECTION -->
+    <section id="visual" class="reveal">
+      <span class="section-tag">02 — Visual Direction</span>
+      <h2>Warm + professional doesn't mean <em>add warm colors</em></h2>
+
+      <p>The brief asked for warm and professional. My first instinct as a storyteller was — this is a feeling, not a color instruction. Designing literally warm means oranges, ambers, and corals alongside blue. That creates visual competition. Two dominant personalities fighting for the user's attention.</p>
+
+      <div class="pull-quote">
+        <p>"One warm moment, used intentionally, is more powerful than two competing ones."</p>
+      </div>
+
+      <p>So I made a deliberate split. <strong>Blue as the professional foundation</strong> — the dominant trust signal in B2B SaaS. Intercom, Zendesk, Freshdesk all anchor in blue for exactly this reason. And <strong>a purple-to-blue gradient as the single warm accent</strong> — used in two specific moments only.</p>
+
+      <h3>The Color System</h3>
+
+      <div class="color-row">
+        <div class="swatch">
+          <div class="swatch-circle" style="background:#2563EB;"></div>
+          <div class="swatch-label">Primary<br>#2563EB</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle" style="background:#152E63;"></div>
+          <div class="swatch-label">Dark<br>#152E63</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle" style="background:linear-gradient(135deg,#8E2DE2,#4A00E0);"></div>
+          <div class="swatch-label">Gradient<br>Accent</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle" style="background:#F6F9FF;border:1px solid #E2E8F0;"></div>
+          <div class="swatch-label">Surface<br>#F6F9FF</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle" style="background:#16A34A;"></div>
+          <div class="swatch-label">Success<br>#16A34A</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle" style="background:#EAB308;"></div>
+          <div class="swatch-label">Warning<br>#EAB308</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-circle" style="background:#FB3748;"></div>
+          <div class="swatch-label">Error<br>#FB3748</div>
+        </div>
+      </div>
+
+      <p>Semantic colors aren't decorative — they carry meaning across every state. Red for urgent alerts and error states. Yellow for warnings and scheduled follow-ups. Green for resolved tickets and success confirmations. Each mapped intentionally to real product moments, not just added because every design system has them.</p>
+
+      <h3>The OG Image — A Deliberate Split</h3>
+      <p>The OG image uses a dark, moody, abstract 3D aesthetic — deliberately different from the landing page. <strong>This was strategic, not inconsistent.</strong></p>
+
+      <div class="callout">
+        <p>The OG image's job is to <strong>stop the scroll</strong> on LinkedIn or in a Slack preview. The landing page's job is to <strong>convert attention into a signup</strong>. Two different jobs. Two different visual languages. One brand connecting them.</p>
+      </div>
+    </section>
+
+    <!-- TYPOGRAPHY -->
+    <section id="typography" class="reveal">
+      <span class="section-tag">03 — Typography</span>
+      <h2>The typeface had to feel <em>technically credible</em></h2>
+
+      <p>Geist was chosen for three specific reasons — it has technical DNA that matches an AI product, it holds legibility at small sizes critical for component text, and its geometric structure communicates modern professionalism without coldness.</p>
+
+      <div class="type-specimen">
+        <div class="specimen-label">Geist — Primary Typeface</div>
+        <div class="specimen-text" style="font-family: sans-serif; letter-spacing: -1px;">AaBbCc</div>
+        <div class="specimen-meta">H1 · 56px · Black weight · Hero headlines</div>
+      </div>
+
+      <h3>Type Scale Decisions</h3>
+      <div class="decision-grid">
+        <div class="decision-card">
+          <div class="card-title">H1 — 56px Geist Black</div>
+          <p class="card-body">Hero headline only. Maximum visual authority. Sets brand personality before anything is read.</p>
+        </div>
+        <div class="decision-card">
+          <div class="card-title">H2 — 48px Geist Bold</div>
+          <p class="card-body">Section headings. Clear hierarchy without competing with H1.</p>
+        </div>
+        <div class="decision-card">
+          <div class="card-title">Body B-1 — 20px / 28px</div>
+          <p class="card-body">Lead paragraphs. Line height at 1.4x ratio — the minimum for comfortable reading on web.</p>
+        </div>
+        <div class="decision-card">
+          <div class="card-title">Body B-2 — 16px / 20px</div>
+          <p class="card-body">General interface text. Standard readable size for SaaS products across all screen densities.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESIGN SYSTEM -->
+    <section id="system" class="reveal">
+      <span class="section-tag">04 — Design System</span>
+      <h2>System first. <em>Screens second.</em></h2>
+
+      <p>Before designing a single screen, I built the complete design system. This was a deliberate decision — not a checkbox exercise. A system created before screens ensures every decision is consistent, developer-ready, and scalable.</p>
+
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-number"><span>8pt</span></div>
+          <div class="stat-label">Grid system<br>for all spacing</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><span>7</span></div>
+          <div class="stat-label">Color token<br>categories</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><span>10</span></div>
+          <div class="stat-label">Typography<br>scale levels</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number"><span>3</span></div>
+          <div class="stat-label">Breakpoints<br>documented</div>
+        </div>
+      </div>
+
+      <h3>Developer-Ready Thinking</h3>
+      <p>Every layer in every component is named. Not "Rectangle 24" — but <strong>btn-primary/hover</strong>, <strong>card-feature/default</strong>, <strong>nav-item/active</strong>. This bridges the gap between design and development without a lengthy handoff call.</p>
+
+      <div class="callout">
+        <p>I've converted my own designs to functioning websites. That experience — wondering what to name a div, feeling the friction of a poorly structured file — taught me that <strong>conversion is as important as designing.</strong> That thinking lives in every component I build.</p>
+      </div>
+
+      <h3>Component States</h3>
+      <p>Every interactive component was documented with states — not just the default appearance. Button hover, focus rings for WCAG accessibility, disabled states, and loading states for the primary CTA. Because a component without states isn't a component — it's a screenshot.</p>
+    </section>
+
+    <!-- LAYOUT & CONVERSION -->
+    <section id="layout" class="reveal">
+      <span class="section-tag">05 — Layout & Conversion</span>
+      <h2>Every section was built to <em>earn the next scroll</em></h2>
+
+      <p>A landing page is a conversation. Each section has one job — move the user one step closer to trust. I designed this page as a conversion funnel:</p>
+
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-number">01</div>
+          <div class="step-content">
+            <div class="step-title">Hero — Establish credibility instantly</div>
+            <p class="step-body">Dual CTA strategy: primary "Join Waitlist" for ready users, secondary "See how it Works" for hesitant ones. The product mockup shows a real support moment — customer asks, AI resolves, status changes. Cause and effect before a headline is read.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">02</div>
+          <div class="step-content">
+            <div class="step-title">Features — Build trust without overwhelming</div>
+            <p class="step-body">Features categorised into Automation and Management — mirroring how support teams actually think about their tools. Not a feature list. A mental map they can already navigate.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">03</div>
+          <div class="step-content">
+            <div class="step-title">How It Works — Remove friction</div>
+            <p class="step-body">Three steps: Customer Asks → AI Responds → Issue Resolved. Makes the product feel simple before commitment. Reduces the cognitive barrier to signing up.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">04</div>
+          <div class="step-content">
+            <div class="step-title">Final CTA — Convert with warmth</div>
+            <p class="step-body">The gradient section — the warmest, most emotionally charged moment on the page — appears at the exact moment of decision. Cool and trustworthy throughout. Warm and exciting at conversion. That contrast is intentional storytelling.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Mobile — Not a Shrunk Desktop</h3>
+      <p>At 375px, mobile wasn't treated as a collapsed version of desktop. Key decisions: hero product mockup moves above the headline to lead with visual proof before text. Features collapse to single column for full readability. Navigation condenses with the primary CTA always visible.</p>
+    </section>
+
+    <!-- WHAT I'D IMPROVE -->
+    <section id="reflection" class="reveal">
+      <span class="section-tag">06 — Honest Reflection</span>
+      <h2>What I'd do <em>differently</em></h2>
+
+      <p>Self-awareness is part of good design. Given more time beyond the 3-day sprint, here's what I'd prioritise — and why.</p>
+
+      <div class="improvement-list">
+        <div class="improvement-item">
+          <div class="imp-icon">🎯</div>
+          <div>
+            <div class="imp-title">Larger, more legible hero mockup</div>
+            <p class="imp-body">The product UI in the hero is too small. It should show one clear cause-and-effect moment — customer asks a question, AI resolves it instantly, status changes to resolved — large enough to read before the headline.</p>
+          </div>
+        </div>
+        <div class="improvement-item">
+          <div class="imp-icon">🃏</div>
+          <div>
+            <div class="imp-title">Feature cards that show, not tell</div>
+            <p class="imp-body">Replace icon + label + one line with micro UI snippets. For Customer History: a real profile panel — customer name, tenure, and recent resolved queries. That's a trust builder. An icon isn't.</p>
+          </div>
+        </div>
+        <div class="improvement-item">
+          <div class="imp-icon">✨</div>
+          <div>
+            <div class="imp-title">Prototype interactions & micro-animations</div>
+            <p class="imp-body">CTA hover animation, smooth scroll between sections, waitlist form submission success state. The page needs to feel alive — not just look right.</p>
+          </div>
+        </div>
+        <div class="improvement-item">
+          <div class="imp-icon">♿</div>
+          <div>
+            <div class="imp-title">WCAG contrast audit on the gradient headline</div>
+            <p class="imp-body">The purple gradient headline needs a formal contrast ratio check. Visual choice vs accessibility requirement — that tension needs a deliberate resolution, not an assumption.</p>
+          </div>
+        </div>
+        <div class="improvement-item">
+          <div class="imp-icon">💬</div>
+          <div>
+            <div class="imp-title">Real social proof</div>
+            <p class="imp-body">"Join 500+ teams" is a placeholder. Real logos, real testimonials, or even a named person with a job title transforms a generic claim into earned credibility.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <div class="closing-section reveal" id="closing">
+      <span class="section-tag" style="color:#60A5FA;">Final Thought</span>
+      <h2>Design is <em>chaotic</em> — and that's more honest</h2>
+      <p>Teaching design gave me deep theoretical foundations. But what I came looking for was the real thing — the deadlines, the tradeoffs, the iteration, the moment you ask "did we actually make an impact?" That chaos is more honest than any classroom exercise. And I'm ready for it.</p>
+
+      <div class="closing-links">
+        <a href="https://www.behance.net/pako_prakash" target="_blank" class="btn-primary">
+          View Portfolio →
+        </a>
+        <a href="mailto:prakashstr.vdm@gmail.com" class="btn-ghost">
+          Get in Touch
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT NAV -->
+  <nav class="side-nav">
+    <span class="nav-label">Case Study</span>
+    <ul>
+      <li><a href="#overview" class="nav-link active"><span class="dot"></span>Overview</a></li>
+      <li><a href="#brief" class="nav-link"><span class="dot"></span>The Brief</a></li>
+      <li><a href="#visual" class="nav-link"><span class="dot"></span>Visual Direction</a></li>
+      <li><a href="#typography" class="nav-link"><span class="dot"></span>Typography</a></li>
+      <li><a href="#system" class="nav-link"><span class="dot"></span>Design System</a></li>
+      <li><a href="#layout" class="nav-link"><span class="dot"></span>Layout & Conversion</a></li>
+      <li><a href="#reflection" class="nav-link"><span class="dot"></span>Honest Reflection</a></li>
+      <li><a href="#closing" class="nav-link"><span class="dot"></span>Final Thought</a></li>
+    </ul>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-author">
+      <div class="author-name">Jayaprakash J</div>
+      <div class="author-role">Visual & UI Designer</div>
+      <div class="author-links">
+        <a href="https://www.behance.net/pako_prakash" target="_blank">Behance</a>
+        <a href="https://www.linkedin.com/in/jayaprakash-j-320364328/" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </nav>
+
+</div>
+
+<script>
+  // Scroll spy for nav
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
